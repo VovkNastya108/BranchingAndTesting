@@ -95,6 +95,35 @@ class HammingCode {
 
     return errorPosition === 0;
   }
+  
+  static validateInput(data, expectedLength) {
+    if (!Array.isArray(data)) {
+      throw Error("Input must be an array");
+    }
+  
+    if (data.length !== expectedLength) {
+      throw Error(`Input must have exactly ${expectedLength} bits`);
+    }
+  
+
+  }
+  static findErrorPosition(data) {
+    if (!Array.isArray(data) || data.length !== 7) {
+      throw Error("findErrorPosition: input must be 7-bit array");
+    }
+
+    const p1 = data[2] ^ data[4] ^ data[6];
+    const p2 = data[2] ^ data[5] ^ data[6];
+    const p3 = data[4] ^ data[5] ^ data[6];
+
+    let errorPosition = 0;
+    if (p1 !== data[0]) errorPosition += 1;
+    if (p2 !== data[1]) errorPosition += 2;
+    if (p3 !== data[3]) errorPosition += 4;
+
+    return errorPosition; // 0 = немає помилки
+  }
+
 }
 
 module.exports = HammingCode;
