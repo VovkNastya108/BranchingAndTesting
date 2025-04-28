@@ -1,6 +1,31 @@
 let hamming = require('../index.js').hamming;
 let assert = require('chai').assert;
+describe('Hamming code additional methods testing', function() {
 
+  it('injectError flips the correct bit', function() {
+    const original = [1, 0, 1, 1, 0, 0, 1];
+    const position = 3;
+    const expected = [1, 0, 0, 1, 0, 0, 1];
+    const corrupted = hamming.injectError(original, position);
+    for (let i = 0; i < 7; i++) {
+      assert.equal(corrupted[i], expected[i]);
+    }
+  })
+
+  it('isValid detects correct and incorrect codes', function() {
+    const validCode = [0, 0, 0, 0, 0, 0, 0];
+    const invalidCode = [0, 1, 0, 0, 0, 0, 0];
+    assert.equal(hamming.isValid(validCode), true);
+    assert.equal(hamming.isValid(invalidCode), false);
+  })
+
+  it('findErrorPosition returns correct error bit position', function() {
+    const dataWithError = [1, 1, 1, 0, 0, 1, 0]; // помилка в 6-ій позиції
+    const errorPos = hamming.findErrorPosition(dataWithError);
+    assert.equal(errorPos, 6);
+  })
+
+})
 describe('Hamming code testing', function() {
   it('posses encode() method', function() {
     assert.equal(hamming.encode != undefined, true);
